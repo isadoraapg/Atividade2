@@ -1,0 +1,41 @@
+{% extends 'disciplinas/base.html' %}
+
+{% block title %}Disciplinas - Sistema de Avaliação{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Disciplinas Disponíveis</h1>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for disciplina in disciplinas %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ disciplina.codigo }} - {{ disciplina.nome }}</h5>
+                <p class="card-text">Professor: {{ disciplina.professor }}</p>
+                
+                <div class="mb-2">
+                    <div class="star-rating">
+                        {% with ''|center:disciplina.media_avaliacoes|make_list as stars %}
+                            {% for _ in stars %}★{% endfor %}
+                        {% endwith %}
+                        {% with ''|center:5|make_list as empty_stars %}
+                            {% for _ in empty_stars|slice:disciplina.media_avaliacoes %}☆{% endfor %}
+                        {% endwith %}
+                        <small class="text-muted">({{ disciplina.media_avaliacoes|floatformat:1 }}/5)</small>
+                    </div>
+                    <small class="text-muted">{{ disciplina.total_avaliacoes }} avaliação(ões)</small>
+                </div>
+                
+                <a href="{% url 'detalhes_disciplina' disciplina.pk %}" class="btn btn-primary">Ver Detalhes</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            Não há disciplinas cadastradas ainda.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

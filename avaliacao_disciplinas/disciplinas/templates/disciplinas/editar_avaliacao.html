@@ -1,0 +1,61 @@
+{% extends 'disciplinas/base.html' %}
+
+{% block title %}Editar Avaliação{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Editar Avaliação</h1>
+<h3>{{ avaliacao.disciplina.codigo }} - {{ avaliacao.disciplina.nome }}</h3>
+<p>Professor: {{ avaliacao.disciplina.professor }}</p>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label class="form-label">{{ form.nota.label }}</label>
+                <div class="d-flex gap-3">
+                    {% for radio in form.nota %}
+                    <div class="form-check">
+                        {{ radio.tag }}
+                        <label class="form-check-label" for="{{ radio.id_for_label }}">
+                            {{ radio.choice_label }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if form.nota.errors %}
+                    <div class="text-danger">
+                        {{ form.nota.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label for="{{ form.comentario.id_for_label }}" class="form-label">{{ form.comentario.label }}</label>
+                <textarea name="{{ form.comentario.name }}" id="{{ form.comentario.id_for_label }}" class="form-control" rows="4">{% if form.comentario.value %}{{ form.comentario.value }}{% endif %}</textarea>
+                {% if form.comentario.errors %}
+                    <div class="text-danger">
+                        {{ form.comentario.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3 form-check">
+                <input type="checkbox" name="{{ form.anonimo.name }}" id="{{ form.anonimo.id_for_label }}" class="form-check-input" {% if form.anonimo.value %}checked{% endif %}>
+                <label for="{{ form.anonimo.id_for_label }}" class="form-check-label">{{ form.anonimo.label }}</label>
+                {% if form.anonimo.errors %}
+                    <div class="text-danger">
+                        {{ form.anonimo.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Atualizar Avaliação</button>
+                <a href="{% url 'detalhes_disciplina' avaliacao.disciplina.pk %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

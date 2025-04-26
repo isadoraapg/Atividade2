@@ -1,0 +1,38 @@
+{% extends 'disciplinas/base.html' %}
+
+{% block title %}Confirmar Exclusão{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-danger text-white">
+        <h2>Confirmar Exclusão</h2>
+    </div>
+    <div class="card-body">
+        <p>Você tem certeza que deseja excluir sua avaliação para a disciplina "{{ avaliacao.disciplina.nome }}"?</p>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Detalhes da Avaliação:</h5>
+                <p><strong>Nota:</strong> {{ avaliacao.nota }} / 5</p>
+                <p><strong>Comentário:</strong> 
+                    {% if avaliacao.comentario %}
+                        {{ avaliacao.comentario }}
+                    {% else %}
+                        <i>Sem comentário</i>
+                    {% endif %}
+                </p>
+                <p><strong>Anônimo:</strong> {% if avaliacao.anonimo %}Sim{% else %}Não{% endif %}</p>
+                <p><strong>Data de criação:</strong> {{ avaliacao.data_criacao|date:"d/m/Y" }}</p>
+            </div>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+                <a href="{% url 'detalhes_disciplina' avaliacao.disciplina.pk %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
